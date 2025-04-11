@@ -1,103 +1,127 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState } from "react";
+import CustomButton from "./components/customButton";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [operation, setOperation] = useState('')
+  const [screenText, setScreenText] = useState('')
+  const [isOperating, setIsOperating] = useState(false)
+  console.log('Dev: operation => ', operation)
+  console.log('Dev: screenText => ', screenText)
+  console.log('Dev: isOperating => ', isOperating)
+
+  function addsValueToOperation(value: string, type: 'number' | 'invert' | 'percentage' | 'operator' | 'delete' | 'result') {
+
+    if (type == 'result') {
+      const operationNumber = new Function(`return ${operation}`)()  // Converts the string of the operation to a number of the result
+
+      setScreenText(`${operationNumber}`)
+      setOperation(`${operationNumber}`)
+      setIsOperating(true)
+    }
+
+    else if (type == 'delete') {
+      setOperation('')
+      setScreenText('')
+      setIsOperating(false)
+    }
+
+
+    else if (type == 'operator' && isOperating == false) {
+      setIsOperating(true)
+      setOperation(operation + value)
+    }
+    else if (type == 'operator' && isOperating == true) {
+      setOperation(operation.slice(0, -1) + value)  //Deletes the last caracter of the operation (an operator) and adds the new operator.
+    }
+
+
+
+    else if (type == 'number' && isOperating == false) {
+      setOperation(operation + value)
+      setScreenText(screenText + value)
+    }
+    else if (type == 'number' && isOperating == true) {
+      setScreenText(value)
+      setOperation(operation + value)
+      setIsOperating(false)
+    }
+  }
+
+  return (
+    <section style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'lightgrey',
+      width: '100vw',
+      height: '100vh'
+    }}>
+
+      {/* Calculator */}
+      <div style={{
+        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+        backgroundColor: '#F4F5F1',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '300px',
+        height: '500px',
+        borderRadius: '20px'
+      }}>
+
+        {/* screen */}
+        <div style={{
+          margin: '10px',
+          display: 'flex',
+          justifyContent: 'end',
+          alignItems: 'center',
+          width: '90%',
+          height: '20%',
+          backgroundColor: '#B5CDD7',
+          boxShadow: 'rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset',
+          borderRadius: '20px'
+        }} >
+          <p style={{ padding: 20, fontSize: 46, fontWeight: 500 }}>{screenText}</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* buttons */}
+        <div style={{
+          margin: '10px',
+          display: 'grid',
+          placeItems: 'center',
+          gridTemplateColumns: 'auto auto auto auto',
+          gridTemplateRows: 'auto auto auto auto auto',
+          width: '90%',
+          height: '70%',
+          borderRadius: '20px',
+          gap: 5
+        }}>
+
+          <CustomButton label={"AC"} color="grey" onClick={() => addsValueToOperation('', 'delete')}></CustomButton>
+          <CustomButton label={"+/-"} color="grey" onClick={() => addsValueToOperation('+', 'operator')}></CustomButton>
+          <CustomButton label={"%"} color="grey" onClick={() => addsValueToOperation('%', 'operator')}></CustomButton>
+          <CustomButton label={"/"} color="yellow" onClick={() => addsValueToOperation('/', 'operator')}></CustomButton>
+          <CustomButton label={"7"} color="black" onClick={() => addsValueToOperation('7', 'number')}></CustomButton>
+          <CustomButton label={"8"} color="black" onClick={() => addsValueToOperation('8', 'number')}></CustomButton>
+          <CustomButton label={"9"} color="black" onClick={() => addsValueToOperation('9', 'number')}></CustomButton>
+          <CustomButton label={"x"} color="yellow" onClick={() => addsValueToOperation('*', 'operator')}></CustomButton>
+          <CustomButton label={"4"} color="black" onClick={() => addsValueToOperation('4', 'number')}></CustomButton>
+          <CustomButton label={"5"} color="black" onClick={() => addsValueToOperation('5', 'number')}></CustomButton>
+          <CustomButton label={"6"} color="black" onClick={() => addsValueToOperation('6', 'number')}></CustomButton>
+          <CustomButton label={"-"} color="yellow" onClick={() => addsValueToOperation('-', 'operator')}></CustomButton>
+          <CustomButton label={"1"} color="black" onClick={() => addsValueToOperation('1', 'number')}></CustomButton>
+          <CustomButton label={"2"} color="black" onClick={() => addsValueToOperation('2', 'number')}></CustomButton>
+          <CustomButton label={"3"} color="black" onClick={() => addsValueToOperation('3', 'number')}></CustomButton>
+          <CustomButton label={"+"} color="yellow" onClick={() => addsValueToOperation('+', 'operator')}></CustomButton>
+          <CustomButton big label={"0"} color="black" onClick={() => addsValueToOperation('0', 'number')}></CustomButton>
+          <CustomButton label={"."} color="black" onClick={() => addsValueToOperation('.', 'number')}></CustomButton>
+          <CustomButton label={"="} color="yellow" onClick={() => addsValueToOperation('', 'result')}></CustomButton>
+        </div>
+      </div>
+    </section >
   );
 }
