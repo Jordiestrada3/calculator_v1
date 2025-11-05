@@ -43,9 +43,10 @@ export default function Home() {
       setIsOperating(true);
       setIsResultShown(false);
       setOperation(operation + value);
+      setCurrentNumber("");
     } else if (type == "operator" && isOperating == true) {
       //Deletes the last caracter of the operation (an operator) and adds the new operator. This is used to change operators in case the user pressed the wrong one
-      setOperation(operation.slice(0, -1) + value); 
+      setOperation(operation.slice(0, -1) + value);
       setIsResultShown(false);
     } else if (type == "number" && isResultShown == true) {
       //If the result is being shown and the user inputs a number, reset everything and start a new operation
@@ -57,11 +58,13 @@ export default function Home() {
       //Adds the number to the operation
       setOperation(operation + value);
       setScreenText(screenText + value);
+      setCurrentNumber(currentNumber + value);
       setIsResultShown(false);
     } else if (type == "number" && isOperating == true) {
       //resets the screen text and adds the number to the operation
       setScreenText(value);
       setOperation(operation + value);
+      setCurrentNumber(currentNumber + value);
       setIsOperating(false);
       setIsResultShown(false);
     } else if (type == "invert") {
