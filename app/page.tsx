@@ -30,11 +30,13 @@ export default function Home() {
       setIsOperating(false);
       setIsResultShown(false);
     } else if (type == "operator" && operation == "") {
-      setIsResultShown(false);
+      //Prevent adding an operator as the first caracter of the operation
+      return;
     } else if (
       type == "operator" &&
       (isOperating == false || isResultShown == true)
     ) {
+      //Adds the operator to the operation if the last input was a number or if the result is being shown
       setIsOperating(true);
       setIsResultShown(false);
       setOperation(operation + value);
