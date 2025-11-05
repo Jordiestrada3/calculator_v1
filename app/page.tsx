@@ -6,10 +6,12 @@ import CustomButton from "./components/customButton";
 export default function Home() {
   const [operation, setOperation] = useState("");
   const [screenText, setScreenText] = useState("");
+  const [currentNumber, setCurrentNumber] = useState("");
   const [isOperating, setIsOperating] = useState(false);
   const [isResultShown, setIsResultShown] = useState(false);
   console.log("Dev: operation => ", operation);
   console.log("Dev: screenText => ", screenText);
+  console.log("Dev: currentNumber => ", currentNumber);
   console.log("Dev: isOperating => ", isOperating);
   console.log("Dev: isResultShown => ", isResultShown);
 
@@ -25,6 +27,7 @@ export default function Home() {
       setIsOperating(false);
       setIsResultShown(true);
     } else if (type == "delete") {
+      //Resets everything
       setOperation("");
       setScreenText("");
       setIsOperating(false);
@@ -41,22 +44,29 @@ export default function Home() {
       setIsResultShown(false);
       setOperation(operation + value);
     } else if (type == "operator" && isOperating == true) {
-      setOperation(operation.slice(0, -1) + value); //Deletes the last caracter of the operation (an operator) and adds the new operator. This is used to change operators in case the user pressed the wrong one
+      //Deletes the last caracter of the operation (an operator) and adds the new operator. This is used to change operators in case the user pressed the wrong one
+      setOperation(operation.slice(0, -1) + value); 
       setIsResultShown(false);
     } else if (type == "number" && isResultShown == true) {
+      //If the result is being shown and the user inputs a number, reset everything and start a new operation
       setScreenText(value);
       setOperation("" + value);
       setIsOperating(false);
       setIsResultShown(false);
     } else if (type == "number" && isOperating == false) {
+      //Adds the number to the operation
       setOperation(operation + value);
       setScreenText(screenText + value);
       setIsResultShown(false);
     } else if (type == "number" && isOperating == true) {
+      //resets the screen text and adds the number to the operation
       setScreenText(value);
       setOperation(operation + value);
       setIsOperating(false);
       setIsResultShown(false);
+    } else if (type == "invert") {
+      //Inverts the sign of the current number (not implemented)
+      return;
     }
   }
 
