@@ -29,6 +29,8 @@ export default function Home() {
       setScreenText("");
       setIsOperating(false);
       setIsResultShown(false);
+    } else if (type == "operator" && operation == "") {
+      setIsResultShown(false);
     } else if (
       type == "operator" &&
       (isOperating == false || isResultShown == true)
