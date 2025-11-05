@@ -28,21 +28,31 @@ export default function Home() {
       setOperation("");
       setScreenText("");
       setIsOperating(false);
+      setIsResultShown(false);
     } else if (
       type == "operator" &&
       (isOperating == false || isResultShown == true)
     ) {
       setIsOperating(true);
+      setIsResultShown(false);
       setOperation(operation + value);
     } else if (type == "operator" && isOperating == true) {
       setOperation(operation.slice(0, -1) + value); //Deletes the last caracter of the operation (an operator) and adds the new operator. This is used to change operators in case the user pressed the wrong one
+      setIsResultShown(false);
+    } else if (type == "number" && isResultShown == true) {
+      setScreenText(value);
+      setOperation("" + value);
+      setIsOperating(false);
+      setIsResultShown(false);
     } else if (type == "number" && isOperating == false) {
       setOperation(operation + value);
       setScreenText(screenText + value);
+      setIsResultShown(false);
     } else if (type == "number" && isOperating == true) {
       setScreenText(value);
       setOperation(operation + value);
       setIsOperating(false);
+      setIsResultShown(false);
     }
   }
 
