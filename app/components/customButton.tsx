@@ -21,9 +21,10 @@ const CustomButton: React.FC<ButtonProps> = ({ label, onClick, color, big }) => 
   return (
     <button
       onClick={onClick}
+      onMouseDown={(e) => e.currentTarget.focus()}  //Focus the button when pressed in PC screens
+      onMouseUp={(e) => e.currentTarget.blur()}     //Unfocus the button when released in PC screens
       onTouchStart={(e) => e.currentTarget.focus()}  //Focus the button when pressed in touch screens
-      onMouseUp={(e) => e.currentTarget.blur()}     //Unfocus the button when released in touch screens
-      onTouchEnd={(e) => e.currentTarget.blur()}    //Unfocus the button when released in PC screens
+      onTouchEnd={(e) => e.currentTarget.blur()}    //Unfocus the button when released in touch screens
       style={{
         borderRadius: 100,
         backgroundColor: getColor(color),
