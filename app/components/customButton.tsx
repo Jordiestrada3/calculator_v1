@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonProps {
-  label: string
+  label: any
   color: 'grey' | 'black' | 'yellow'
   onClick: () => void
   big?: boolean

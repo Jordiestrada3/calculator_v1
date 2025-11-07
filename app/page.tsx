@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import CustomButton from "./components/customButton";
+import { Delete } from "lucide-react";
 
 export default function Home() {
   const [operation, setOperation] = useState("");
@@ -17,7 +18,7 @@ export default function Home() {
 
   function addsValueToOperation(
     value: string,
-    type: "number" | "invert" | "percentage" | "operator" | "delete" | "result"
+    type: "number" | "delete" | "percentage" | "operator" | "reset" | "result"
   ) {
     if (type == "result") {
       const operationNumber = new Function(`return ${operation}`)(); // Converts the string of the operation to a number of the result
@@ -26,12 +27,29 @@ export default function Home() {
       setOperation(`${operationNumber}`);
       setIsOperating(false);
       setIsResultShown(true);
-    } else if (type == "delete") {
+    } else if (type == "reset") {
       //Resets everything
       setOperation("");
       setScreenText("");
       setIsOperating(false);
       setIsResultShown(false);
+    } else if (type == "delete" && isResultShown == true) {
+      //Resets everything
+      setOperation("");
+      setScreenText("");
+      setIsOperating(false);
+      setIsResultShown(false);
+    } else if (type == "delete" && isOperating == true) {
+      //prevents deleting on screen when the last input was an operator
+      setOperation(operation.slice(0, -1));
+      setCurrentNumber(currentNumber.slice(0, -1));
+      setIsOperating(false);
+    } else if (type == "delete") {
+      //deletes the last caracter of the operation
+      setOperation(operation.slice(0, -1));
+      setScreenText(screenText.slice(0, -1));
+      setCurrentNumber(currentNumber.slice(0, -1));
+      setIsOperating(false);
     } else if (type == "operator" && operation == "") {
       //Prevent adding an operator as the first caracter of the operation
       return;
@@ -67,9 +85,6 @@ export default function Home() {
       setCurrentNumber(currentNumber + value);
       setIsOperating(false);
       setIsResultShown(false);
-    } else if (type == "invert") {
-      //Inverts the sign of the current number (not implemented)
-      return;
     }
   }
 
@@ -106,7 +121,7 @@ export default function Home() {
             flexDirection: "column",
             justifyContent: "end",
             textAlign: "right",
-            // alignItems: "center",
+            alignItems: "end",
             width: "90%",
             height: "20%",
             backgroundColor: "#B5CDD7",
@@ -139,12 +154,16 @@ export default function Home() {
           <CustomButton
             label={"AC"}
             color="grey"
-            onClick={() => addsValueToOperation("", "delete")}
+            onClick={() => addsValueToOperation("", "reset")}
           ></CustomButton>
           <CustomButton
-            label={"+/-"}
+            label={
+              <Delete
+                style={{ justifySelf: "center", alignSelf: "center" }}
+              />
+            }
             color="grey"
-            onClick={() => addsValueToOperation("+", "operator")}
+            onClick={() => addsValueToOperation("+", "delete")}
           ></CustomButton>
           <CustomButton
             label={"%"}
